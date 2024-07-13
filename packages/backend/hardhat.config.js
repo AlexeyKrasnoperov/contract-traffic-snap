@@ -10,15 +10,18 @@ module.exports = {
 			}
 		}
 	},
+	sourcify: {
+		enabled: false,
+	},
 	allowUnlimitedContractSize: true,
 	networks: {
 		hardhat: {},
-		ETH_SEPOLIA: {
+		sepolia: {
 			accounts: [`${process.env.PRIVATE_KEY}`],
-			url: `https://eth-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`
+			url: `https://eth-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
 		},
 	},
 	etherscan: {
-		apiKey: `${process.env.ETHERSCAN_API_KEY}`
+		apiKey: `${process.env.ETHERSCAN_API_KEY}`,
 	},
 }

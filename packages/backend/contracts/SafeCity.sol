@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.24;
 
 import {FunctionsClient} from "@chainlink/contracts/src/v0.8/functions/v1_0_0/FunctionsClient.sol";
 import {ConfirmedOwner} from "@chainlink/contracts/src/v0.8/shared/access/ConfirmedOwner.sol";
@@ -40,8 +40,14 @@ contract SafeCity is FunctionsClient, ConfirmedOwner {
         string review;
     }
 
+    struct ReviewCount {
+        uint256 happy;
+        uint256 sad;
+    }
+
     // Review[] public reviews;
     mapping(address reviewedAddress => Review[]) private reviews;
+    mapping(address reviewedAddress => ReviewCount) private review_count;
 
     struct FunctionRequestMetadata {
         address reviewer;
@@ -95,6 +101,10 @@ contract SafeCity is FunctionsClient, ConfirmedOwner {
         return reviews[_reviewedAddress];
     }
 
+    function getReviewCount(address _reviewedAddress) public view returns (uint256, uint256) {
+        return (review_count[_reviewedAddress].happy, review_count[_reviewedAddress].sad);
+    }
+
     function toAsciiString(address x) internal pure returns (string memory) {
         bytes memory s = new bytes(40);
         for (uint i = 0; i < 20; i++) {
@@ -135,6 +145,11 @@ contract SafeCity is FunctionsClient, ConfirmedOwner {
         if (abi.decode(response, (uint256)) == 1) {
             Review memory newReview = Review(_reviewer, _happy, _review);
             reviews[_reviewedAddress].push(newReview);
+            if (_happy) {
+                review_count[_reviewedAddress].happy++;
+            } else {
+                review_count[_reviewedAddress].sad++;
+            }
         }
 
         emit NewReview(_reviewedAddress, _reviewer, _happy, _review, err);
