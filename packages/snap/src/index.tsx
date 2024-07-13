@@ -4,7 +4,7 @@ import type {
   OnUserInputHandler,
   OnTransactionHandler
 } from '@metamask/snaps-sdk';
-import { SnapMethods } from '@metamask/snaps-sdk';
+import { divider, SnapMethods } from '@metamask/snaps-sdk';
 import { UserInputEventType, DialogType, image } from '@metamask/snaps-sdk';
 import { assert } from '@metamask/utils';
 
@@ -48,18 +48,21 @@ export const onRpcRequest: OnRpcRequestHandler = async ({ request }) => {
         method: 'snap_dialog',
         params: {
           type: DialogType.Alert,
+          // content: <Image src='https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png />,
           content: panel([
             image(svgIcon),
             text(`Current block: **${currentBlock}**`),
             text(`Interactions: **${interactionsCount}**`),
             text(`Upvotes: ...`),
             text(`Downvotes: ...`),
+            divider(),
+            text("After interacting with the contract, please provide feedback. You vote will only count if you interacted with a contract in the last 24 hours."),
             button({
               value: "I'm happy",
               name: "interactive-button",
             }),
             button({
-              value: "I got scammed",
+              value: "I'm NOT happy",
               name: "interactive-button",
               variant: "secondary",
             }),
