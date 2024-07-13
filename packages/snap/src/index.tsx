@@ -4,17 +4,12 @@ import type {
   OnUserInputHandler,
   OnTransactionHandler
 } from '@metamask/snaps-sdk';
-import { divider, SnapMethods } from '@metamask/snaps-sdk';
-import { UserInputEventType, DialogType, image } from '@metamask/snaps-sdk';
+import { UserInputEventType, DialogType } from '@metamask/snaps-sdk';
 import { assert } from '@metamask/utils';
 
-import { Counter } from './components';
-import { getCurrent, increment } from './utils';
-import { panel, text, button } from '@metamask/snaps-sdk';
+import { panel, divider, text, button, image } from '@metamask/snaps-sdk';
 
-import { Image } from '@metamask/snaps-sdk/jsx';
-
-import svgIcon from "./vitalik-traffic.jpeg";
+import svgIcon from "../images/vitalik-traffic.jpeg";
 
 /**
  * Handle incoming JSON-RPC requests from the dapp, sent through the
@@ -48,15 +43,14 @@ export const onRpcRequest: OnRpcRequestHandler = async ({ request }) => {
         method: 'snap_dialog',
         params: {
           type: DialogType.Alert,
-          // content: <Image src='https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png />,
           content: panel([
             image(svgIcon),
             text(`Current block: **${currentBlock}**`),
-            text(`Interactions: **${interactionsCount}**`),
+            text(`Popularity: **${interactionsCount}**`),
             text(`Upvotes: ...`),
             text(`Downvotes: ...`),
             divider(),
-            text("After interacting with the contract, please provide feedback. You vote will only count if you interacted with a contract in the last 24 hours."),
+            text("After interacting with the contract, please provide feedback. Your vote will only count if you interacted with the contract in the last 24 hours."),
             button({
               value: "I'm happy",
               name: "interactive-button",
@@ -66,7 +60,6 @@ export const onRpcRequest: OnRpcRequestHandler = async ({ request }) => {
               name: "interactive-button",
               variant: "secondary",
             }),
-            
           ]),
         },
       });
@@ -86,48 +79,69 @@ export const onTransaction: OnTransactionHandler = async ({
   chainId,
   transaction,
 }) => {
-  const count = 1;
+  const contractAddress = transaction.to;
 
-  const interactionsCount = 100;
+  const blocksInHour = 1800;
+  const currentBlock = Number(await ethereum.request({
+    method: "eth_blockNumber",
+  }) as number);
+  const apiURL = `https://explorer.linea.build/api?module=account&action=txlist&address=${contractAddress}&startblock=${currentBlock - blocksInHour}&endblock=${currentBlock}&sort=desc&offset=100&page=0`
 
-  return await snap.request({
-    method: 'snap_dialog',
-    params: {
+  const response = await fetch(apiURL);
+  const data = await response.json();
+  const interactionsCount = data["result"].length;
+
+  return {
       type: "alert",
       content: panel([
-        text(`Hello, **${transactionOrigin}**!`),
-        text(`Interactions in the last 24h: **${interactionsCount}**`)
+        image(svgIcon),
+        text(`Current block: **${currentBlock}**`),
+        text(`Popularity: **${interactionsCount}**`),
+        text(`Happy users: ...`),
+        text(`Unhappy users: ...`),
+        divider(),
+        text("After interacting with the contract, please provide feedback. Your vote will only count if you interacted with the contract in the last 24 hours."),
+        button({
+          value: "I'm happy",
+          name: "interactive-button",
+        }),
+        button({
+          value: "I'm NOT happy",
+          name: "interactive-button",
+          variant: "secondary",
+        }),
+      ]),
+    };
+}
+
+/**
+ * Handle incoming user events coming from the Snap interface. This handler
+ * handles one event:
+ *
+ * - `increment`: Increment the counter and update the Snap interface with the
+ * new count. It is triggered when the user clicks the increment button.
+ *
+ * @param params - The event parameters.
+ * @param params.id - The Snap interface ID where the event was fired.
+ * @param params.event - The event object containing the event type, name and
+ * value.
+ * @see https://docs.metamask.io/snaps/reference/exports/#onuserinput
+ */
+export const onUserInput: OnUserInputHandler = async ({ event, id }) => {
+  // Since this Snap only has one event, we can assert the event type and name
+  // directly.
+  assert(event.type === UserInputEventType.ButtonClickEvent);
+  assert(event.name === 'increment');
+
+  const count = await console.log("CLICKED");
+
+  await snap.request({
+    method: 'snap_updateInterface',
+    params: {
+      id,
+      ui:  panel([
+        text("CLICKED")
       ]),
     },
   });
-}
-
-// /**
-//  * Handle incoming user events coming from the Snap interface. This handler
-//  * handles one event:
-//  *
-//  * - `increment`: Increment the counter and update the Snap interface with the
-//  * new count. It is triggered when the user clicks the increment button.
-//  *
-//  * @param params - The event parameters.
-//  * @param params.id - The Snap interface ID where the event was fired.
-//  * @param params.event - The event object containing the event type, name and
-//  * value.
-//  * @see https://docs.metamask.io/snaps/reference/exports/#onuserinput
-//  */
-// export const onUserInput: OnUserInputHandler = async ({ event, id }) => {
-//   // Since this Snap only has one event, we can assert the event type and name
-//   // directly.
-//   assert(event.type === UserInputEventType.ButtonClickEvent);
-//   assert(event.name === 'increment');
-
-//   const count = await increment();
-
-//   await snap.request({
-//     method: 'snap_updateInterface',
-//     params: {
-//       id,
-//       ui: <Counter count={count} />,
-//     },
-//   });
-// };
+};

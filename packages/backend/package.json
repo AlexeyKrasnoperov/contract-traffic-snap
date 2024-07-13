@@ -1,0 +1,34 @@
+{
+	"name": "safe-city-contracts",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"build": "npx hardhat compile",
+		"deploy-sepolia": "npx hardhat run ./scripts/deploy.js --network ETH_SEPOLIA",
+		"deploy-linea-sepolia": "npx hardhat run ./scripts/deploy.js --network LINEA_SEPOLIA",
+		"node": "npx hardhat node",
+		"deploy-local": "npx hardhat run ./scripts/deploy.js --network localhost"
+	},
+	"devDependencies": {
+		"@chainlink/contracts": "^1.1.1",
+		"@nomicfoundation/hardhat-chai-matchers": "^2.0.4",
+		"@nomicfoundation/hardhat-ethers": "^3.0.0",
+		"@nomicfoundation/hardhat-network-helpers": "^1.0.0",
+		"@nomicfoundation/hardhat-toolbox": "^4.0.0",
+		"@nomicfoundation/hardhat-verify": "^2.0.0",
+		"@openzeppelin/contracts": "^5.0.1",
+		"@typechain/ethers-v6": "^0.5.0",
+		"@typechain/hardhat": "^9.0.0",
+		"@types/chai": "^4.2.0",
+		"@types/mocha": ">=9.1.0",
+		"chai": "^4.2.0",
+		"dotenv": "^16.0.2",
+		"ethers": "^6.10.0",
+		"hardhat": "latest",
+		"hardhat-gas-reporter": "^1.0.8",
+		"solidity-coverage": "^0.8.1",
+		"ts-node": ">=8.0.0",
+		"typechain": "^8.3.0",
+		"typescript": ">=4.5.0"
+	}
+}

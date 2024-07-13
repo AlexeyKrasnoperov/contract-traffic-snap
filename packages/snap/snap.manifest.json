@@ -7,10 +7,11 @@
     "url": "https://github.com/AlexeyKrasnoperov/contract-traffic-snap.git"
   },
   "source": {
-    "shasum": "c3LcB6GY/YC3Mjc5BDebSk9AY/FTlqJ7U5mBNuI3vNM=",
+    "shasum": "aUKuCiEFb6ItnI6mAdbRQccdgxk/eqREI5V3JfvDO4k=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
+        "iconPath": "images/icon.svg",
         "packageName": "contract-traffic-snap",
         "registry": "https://registry.npmjs.org/"
       }
