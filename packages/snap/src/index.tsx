@@ -2,12 +2,19 @@ import { rpcErrors } from '@metamask/rpc-errors';
 import type {
   OnRpcRequestHandler,
   OnUserInputHandler,
+  OnTransactionHandler
 } from '@metamask/snaps-sdk';
-import { UserInputEventType, DialogType } from '@metamask/snaps-sdk';
+import { SnapMethods } from '@metamask/snaps-sdk';
+import { UserInputEventType, DialogType, image } from '@metamask/snaps-sdk';
 import { assert } from '@metamask/utils';
 
 import { Counter } from './components';
 import { getCurrent, increment } from './utils';
+import { panel, text, button } from '@metamask/snaps-sdk';
+
+import { Image } from '@metamask/snaps-sdk/jsx';
+
+import svgIcon from "./vitalik-traffic.jpeg";
 
 /**
  * Handle incoming JSON-RPC requests from the dapp, sent through the
@@ -25,13 +32,39 @@ import { getCurrent, increment } from './utils';
 export const onRpcRequest: OnRpcRequestHandler = async ({ request }) => {
   switch (request.method) {
     case 'hello': {
-      const count = 1;
+      const contractAddress = "0x1195Cf65f83B3A5768F3C496D3A05AD6412c64B7";
+
+      const blocksInHour = 1800;
+      const currentBlock = Number(await ethereum.request({
+        method: "eth_blockNumber",
+      }) as number);
+      const apiURL = `https://explorer.linea.build/api?module=account&action=txlist&address=${contractAddress}&startblock=${currentBlock - blocksInHour}&endblock=${currentBlock}&sort=desc&offset=100&page=0`
+
+      const response = await fetch(apiURL);
+      const data = await response.json();
+      const interactionsCount = data["result"].length;
 
       return await snap.request({
         method: 'snap_dialog',
         params: {
           type: DialogType.Alert,
-          content: <Counter count={count} />,
+          content: panel([
+            image(svgIcon),
+            text(`Current block: **${currentBlock}**`),
+            text(`Interactions: **${interactionsCount}**`),
+            text(`Upvotes: ...`),
+            text(`Downvotes: ...`),
+            button({
+              value: "I'm happy",
+              name: "interactive-button",
+            }),
+            button({
+              value: "I got scammed",
+              name: "interactive-button",
+              variant: "secondary",
+            }),
+            
+          ]),
         },
       });
     }
@@ -44,6 +77,27 @@ export const onRpcRequest: OnRpcRequestHandler = async ({ request }) => {
       });
   }
 };
+
+export const onTransaction: OnTransactionHandler = async ({
+  transactionOrigin,
+  chainId,
+  transaction,
+}) => {
+  const count = 1;
+
+  const interactionsCount = 100;
+
+  return await snap.request({
+    method: 'snap_dialog',
+    params: {
+      type: "alert",
+      content: panel([
+        text(`Hello, **${transactionOrigin}**!`),
+        text(`Interactions in the last 24h: **${interactionsCount}**`)
+      ]),
+    },
+  });
+}
 
 // /**
 //  * Handle incoming user events coming from the Snap interface. This handler

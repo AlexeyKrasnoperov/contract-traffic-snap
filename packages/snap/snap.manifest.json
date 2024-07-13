@@ -1,5 +1,5 @@
 {
-  "version": "0.1",
+  "version": "0.1.0",
   "description": "Contract Traffic snap helps you to visually destinguinsh between real and phishing smart contracts",
   "proposedName": "Contract Traffic",
   "repository": {
@@ -7,11 +7,11 @@
     "url": "https://github.com/AlexeyKrasnoperov/contract-traffic-snap.git"
   },
   "source": {
-    "shasum": "y/rQ6UXIxnFH8Pu52B9yyNmD2i6MMLhmAHAvPHvsdQY=",
+    "shasum": "cuLcWLsXQAy2MQnsByVyL9Rwn54ZxuzO5DZSY8MLCiQ=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
-        "packageName": "snap",
+        "packageName": "contract-traffic-snap",
         "registry": "https://registry.npmjs.org/"
       }
     }
@@ -20,8 +20,13 @@
     "endowment:rpc": {
       "dapps": true
     },
+    "endowment:ethereum-provider": {},
     "snap_dialog": {},
-    "snap_manageState": {}
+    "snap_manageState": {},
+    "endowment:transaction-insight": {
+      "allowTransactionOrigin": true
+    },
+    "endowment:network-access": {}
   },
   "manifestVersion": "0.1"
 }
