@@ -11,6 +11,15 @@
     "noUncheckedIndexedAccess": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "es2020"
-  }
+    "target": "es2020",
+    "baseUrl": "./",
+    "jsx": "react-jsxdev",
+    // "paths": {
+    //   "@metamask/*/jsx": ["../../../*/src/jsx"],
+    //   "@metamask/*/jsx-dev-runtime": ["../../../*/src/jsx"],
+    //   "@metamask/*": ["../../../*/src"]
+    // }
+  },
+  // "extends": "../../tsconfig.json",
+  "include": ["src", "snap.config.ts"]
 }
