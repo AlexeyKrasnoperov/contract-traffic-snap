@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/alexey/Development/crypto/hackathons/contract-traffic-snap/packages/backend/contracts/SafeCity.sol": {
-      "lastModificationDate": 1720912174453,
-      "contentHash": "8ab78c86c9a771969d52c85fa5fda2fb",
+      "lastModificationDate": 1720916525497,
+      "contentHash": "07f0f7612088a6d39ad9a61d95bed03f",
       "sourceName": "contracts/SafeCity.sol",
       "solcConfig": {
         "version": "0.8.24",

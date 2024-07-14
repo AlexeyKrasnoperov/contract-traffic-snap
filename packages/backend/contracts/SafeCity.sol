@@ -16,7 +16,7 @@ contract SafeCity is FunctionsClient, ConfirmedOwner {
         "const userAddress = args[1];"
         "const currentBlock = args[2];"
         "const startBlock = currentBlock - 1800;"
-        "const url = `https://explorer.linea.build/api?module=account&action=txlist&address=${contractAddress}&startblock=${startBlock}&endblock=${currentBlock}&sort=desc&offset=100&page=0&filterBy=to`"
+        "const url = `https://eth-sepolia.blockscout.com/api?module=account&action=txlist&address=${contractAddress}&startblock=${startBlock}&endblock=${currentBlock}&sort=desc&offset=100&page=0&filterBy=to`"
         "const apiRequest = Functions.makeHttpRequest({"
         "url: url"
         "});"
