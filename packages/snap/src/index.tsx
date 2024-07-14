@@ -44,7 +44,25 @@ export const onRpcRequest: OnRpcRequestHandler = async ({ request }) => {
       const data = await response.json();
       const interactionsCount = data["result"].length;
 
-      const svgIcon = happyHigh;
+      switch (true) {
+        case interactionsCount > 100:
+          var svgIcon = happyHigh;
+          break;
+        case interactionsCount > 50:
+          var svgIcon = happyMedium;
+          break;
+        case interactionsCount > 10:
+          var svgIcon = happyLow;
+          break;
+        case interactionsCount > 5:
+          var svgIcon = unhappyLow;
+          break;
+        case interactionsCount > 1:
+          var svgIcon = unhappyMedium;
+          break;
+        default:
+          var svgIcon = unhappyHigh;
+      }
 
       return await snap.request({
         method: 'snap_dialog',
