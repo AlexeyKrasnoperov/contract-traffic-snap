@@ -9,7 +9,12 @@ import { assert } from '@metamask/utils';
 
 import { panel, divider, text, button, image } from '@metamask/snaps-sdk';
 
-import svgIcon from "../images/vitalik-traffic.jpeg";
+import happyHigh from "../images/happy-high.png";
+import happyMedium from "../images/happy-medium.png";
+import happyLow from "../images/happy-low.png";
+import unhappyHigh from "../images/unhappy-high.png";
+import unhappyMedium from "../images/unhappy-medium.png";
+import unhappyLow from "../images/unhappy-low.png";
 
 /**
  * Handle incoming JSON-RPC requests from the dapp, sent through the
@@ -38,6 +43,8 @@ export const onRpcRequest: OnRpcRequestHandler = async ({ request }) => {
       const response = await fetch(apiURL);
       const data = await response.json();
       const interactionsCount = data["result"].length;
+
+      const svgIcon = happyHigh;
 
       return await snap.request({
         method: 'snap_dialog',
@@ -91,6 +98,9 @@ export const onTransaction: OnTransactionHandler = async ({
   const data = await response.json();
   const interactionsCount = data["result"].length;
 
+  const svgIcon = happyHigh;
+
+
   return {
       type: "alert",
       content: panel([
@@ -127,21 +137,21 @@ export const onTransaction: OnTransactionHandler = async ({
  * value.
  * @see https://docs.metamask.io/snaps/reference/exports/#onuserinput
  */
-export const onUserInput: OnUserInputHandler = async ({ event, id }) => {
-  // Since this Snap only has one event, we can assert the event type and name
-  // directly.
-  assert(event.type === UserInputEventType.ButtonClickEvent);
-  assert(event.name === 'increment');
+// export const onUserInput: OnUserInputHandler = async ({ event, id }) => {
+//   // Since this Snap only has one event, we can assert the event type and name
+//   // directly.
+//   assert(event.type === UserInputEventType.ButtonClickEvent);
+//   assert(event.name === 'increment');
 
-  const count = await console.log("CLICKED");
+//   const count = await console.log("CLICKED");
 
-  await snap.request({
-    method: 'snap_updateInterface',
-    params: {
-      id,
-      ui:  panel([
-        text("CLICKED")
-      ]),
-    },
-  });
-};
+//   await snap.request({
+//     method: 'snap_updateInterface',
+//     params: {
+//       id,
+//       ui:  panel([
+//         text("CLICKED")
+//       ]),
+//     },
+//   });
+// };

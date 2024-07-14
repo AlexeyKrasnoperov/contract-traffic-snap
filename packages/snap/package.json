@@ -1,7 +1,7 @@
 {
-  "name": "contract-traffic-snap",
+  "name": "safe-city-snap",
   "version": "0.1.0",
-  "description": "Contract Traffic snap helps you to visually destinguinsh between real and phishing smart contracts.",
+  "description": "Safe City snap helps you to visually destinguinsh between real and phishing smart contracts.",
   "repository": {
     "type": "git",
     "url": "https://github.com/AlexeyKrasnoperov/contract-traffic-snap.git"
